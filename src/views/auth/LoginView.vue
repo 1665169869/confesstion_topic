@@ -1,7 +1,7 @@
 <template>
 	<v-main class="login-view">
 		<div class="title">
-			<h2>寻物启事贴</h2>
+			<h2 class="text-primary-title-color">{{ config.app.name }}</h2>
 		</div>
 
 		<div class="login-label">
@@ -76,6 +76,7 @@
 </template>
 
 <script lang="ts" setup>
+import { config } from "@/config";
 import { Router, router } from "@/router";
 import { isEmail } from "@/utils";
 import { ref } from "vue";
@@ -122,7 +123,6 @@ const submitLogin = (event: Event) => {
 	padding: 0 10px;
 }
 .title {
-	color: #434483;
 	flex: 1;
 
 	display: flex;

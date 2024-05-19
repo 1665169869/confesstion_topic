@@ -5,6 +5,9 @@ import vue from "@vitejs/plugin-vue";
 
 import vuetifyPlugin from "vite-plugin-vuetify";
 import postcssPresetEnv from "postcss-preset-env";
+
+import { proxy } from "./src/config/proxy.config";
+
 // https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [
@@ -22,5 +25,8 @@ export default defineConfig({
 		postcss: {
 			plugins: [postcssPresetEnv()]
 		}
+	},
+	server: {
+		proxy
 	}
 });

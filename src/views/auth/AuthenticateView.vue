@@ -4,8 +4,8 @@
 			<v-form class="auth-form" @submit.prevent>
 				<v-row class="auth-header">
 					<v-col>
-						<h1 class="title text-primary-text">Authenticate Code</h1>
-						<p class="desc text-secondary-text">输入发送到您邮件的六位数验证码</p>
+						<h1 class="title text-primary-color">Authenticate Code</h1>
+						<p class="desc text-secondary-color">输入发送到您邮件的六位数验证码</p>
 					</v-col>
 				</v-row>
 				<v-row>
