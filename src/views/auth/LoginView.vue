@@ -79,6 +79,7 @@
 import { config } from "@/config";
 import { Router, router } from "@/router";
 import { isEmail } from "@/utils";
+import { BaseService } from "@/utils/request";
 import { ref } from "vue";
 const emailVal = ref("");
 const passwordVal = ref("");
@@ -111,10 +112,18 @@ const submitLogin = (event: Event) => {
 	}
 
 	loading.value = true;
-	setTimeout(() => {
-		loading.value = false;
-		router.push(Router.authenticated);
-	}, 2000);
+
+	BaseService.login({ email: emailVal.value, password: passwordVal.value })
+		.then((resp) => {
+			console.log(resp.data);
+
+			if (resp.data.code === 1000) {
+				router.push(Router.home);
+			}
+		})
+		.finally(() => {
+			loading.value = false;
+		});
 };
 </script>
 

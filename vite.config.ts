@@ -6,7 +6,7 @@ import vue from "@vitejs/plugin-vue";
 import vuetifyPlugin from "vite-plugin-vuetify";
 import postcssPresetEnv from "postcss-preset-env";
 
-import { proxy } from "./src/config/proxy.config";
+import { proxy } from "./src/config";
 
 // https://vitejs.dev/config/
 export default defineConfig({
