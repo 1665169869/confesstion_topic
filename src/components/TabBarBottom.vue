@@ -26,7 +26,7 @@ import { Router, router } from "@/router";
 import { ref } from "vue";
 
 export default {
-	name: "BottomNav",
+	name: "bottom-nav",
 	props: {
 		tab: {
 			type: String,

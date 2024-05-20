@@ -45,7 +45,7 @@
 						:loading="loading"
 						@click="submitLogin"
 					>
-						<template v-slot:prepend>
+						<template #prepend>
 							<v-icon icon="mdi-login"></v-icon>
 						</template>
 						<span>登录</span>
@@ -66,7 +66,7 @@
 				type="button"
 				@click="$router.push(Router.register)"
 			>
-				<template v-slot:prepend>
+				<template #prepend>
 					<v-icon icon="mdi-account-plus"></v-icon>
 				</template>
 				<span>注册</span>
@@ -78,9 +78,10 @@
 <script lang="ts" setup>
 import { config } from "@/config";
 import { Router, router } from "@/router";
-import { isEmail } from "@/utils";
+import { isEmail, storage } from "@/utils";
 import { BaseService } from "@/utils/request";
 import { ref } from "vue";
+
 const emailVal = ref("");
 const passwordVal = ref("");
 const loading = ref(false);
@@ -101,6 +102,7 @@ const rules = {
 const passwordVisibility = ref(false);
 
 const submitLogin = (event: Event) => {
+	
 	if (!emailVal.value || !passwordVal.value) {
 		// emailVal == '' and passwordVal == ''
 		return;
@@ -117,9 +119,19 @@ const submitLogin = (event: Event) => {
 		.then((resp) => {
 			console.log(resp.data);
 
-			if (resp.data.code === 1000) {
-				router.push(Router.home);
+			if (resp.data.code === 1000 && resp.data.data) {
+				storage.set("token", resp.data.data.token, resp.data.data.expire);
+				storage.set(
+					"refreshToken",
+					resp.data.data.refreshToken,
+					resp.data.data.refreshExpire
+				);
+				console.log("登录成功", resp.data.data.token, resp.data.data.refreshToken);
+				// router.push(Router.home);
 			}
+		})
+		.catch((err) => {
+			console.log(err);
 		})
 		.finally(() => {
 			loading.value = false;

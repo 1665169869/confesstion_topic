@@ -8,7 +8,7 @@ class Router {
 	public static forum = "/home/forum";
 	public static myUser = "/home/my-user";
 }
-const routes:Readonly<RouteRecordRaw[]> = [
+const routes: Readonly<RouteRecordRaw[]> = [
 	{
 		path: "/",
 		name: "index",
@@ -18,7 +18,7 @@ const routes:Readonly<RouteRecordRaw[]> = [
 		path: Router.home,
 		name: "home",
 		redirect: "/home/forum",
-		component: () => import("../views/HomeView.vue"),
+		component: () => import("../views/home/HomeView.vue"),
 		children: [
 			{
 				path: "forum",
@@ -60,7 +60,7 @@ const routes:Readonly<RouteRecordRaw[]> = [
 		name: "authenticated",
 		component: () => import("../views/auth/AuthenticateView.vue")
 	}
-]
+];
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),

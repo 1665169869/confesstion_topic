@@ -1,5 +1,5 @@
 interface ImportMetaEnv {
-	readonly VITE_NAME: string;
+	readonly VITE_APP_NAME: string;
 	readonly VITE_TIMEOUT: number;
 }
 

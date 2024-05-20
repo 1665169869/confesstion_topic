@@ -1,11 +1,21 @@
 {
-	"files": [],
-	"references": [
-		{
-			"path": "./tsconfig.node.json"
+	"extends": "@vue/tsconfig/tsconfig.dom.json",
+	"include": ["env.d.ts", "src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+	"exclude": ["src/**/__tests__/*", "node_modules"],
+	"compilerOptions": {
+		"target": "ES2018",
+		"module": "ES2022",
+		"moduleResolution": "Bundler",
+		"esModuleInterop": true,
+		"allowJs": false,
+		"strict": false,
+		"composite": true,
+		"baseUrl": ".",
+		"forceConsistentCasingInFileNames": true,
+		"paths": {
+			"@/*": ["./src/*"]
 		},
-		{
-			"path": "./tsconfig.app.json"
-		}
-	]
+		"skipLibCheck": true,
+		"lib": ["DOM", "ES2018"]
+	}
 }

@@ -4,6 +4,4 @@ const isEmail = (val: string) => {
 
 	return pattern.test(val);
 };
-export {
-    isEmail
-};
+export { isEmail };

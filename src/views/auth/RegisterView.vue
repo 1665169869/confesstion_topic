@@ -1,7 +1,7 @@
 <template>
 	<v-main class="register-view">
 		<div class="title">
-			<h2>寻物启事贴</h2>
+			<h2>{{ config.app.name }}</h2>
 		</div>
 
 		<div class="register-label">
@@ -55,7 +55,7 @@
 						:src="captcha.image"
 						@click="getCaptcha"
 					>
-						<template v-slot:placeholder>
+						<template #placeholder>
 							<div class="d-flex align-center justify-center fill-height">
 								<v-progress-circular
 									color="grey-lighten-4"
@@ -76,7 +76,7 @@
 						@click="submitRegister"
 						selected-class="btn-selected"
 					>
-						<template v-slot:prepend>
+						<template #prepend>
 							<v-icon icon="mdi-account-plus"></v-icon>
 						</template>
 						<span>注册</span>
@@ -94,7 +94,7 @@
 				type="button"
 				@click="$router.push(Router.login)"
 			>
-				<template v-slot:prepend>
+				<template #prepend>
 					<v-icon icon="mdi-login"></v-icon>
 				</template>
 				<span>登录</span>
@@ -104,6 +104,7 @@
 </template>
 
 <script lang="ts" setup>
+import { config } from "@/config";
 import { Router, router } from "@/router";
 import { isEmail } from "@/utils";
 import { BaseService } from "@/utils/request";

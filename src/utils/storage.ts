@@ -33,7 +33,6 @@ export default {
 	 */
 	set(key: string, value: any, expires?: any) {
 		store.set(key, value);
-
 		if (expires) {
 			store.set(`${key}${this.suffix}`, Date.parse(String(new Date())) + expires * 1000);
 		}

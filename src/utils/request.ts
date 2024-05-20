@@ -1,12 +1,29 @@
 import { config, isDev, proxy } from "@/config";
 import type { CaptchaRequestModel, CaptchaResponseModel } from "@/models/captcha";
 import axios, { type AxiosRequestConfig } from "axios";
-import { color16 } from ".";
+import { color16, storage } from ".";
 import type { LoginRequestModel, LoginResponseModel } from "@/models/login";
+import { router } from "@/router";
 
 export const axiosInstance = axios.create({
 	timeout: import.meta.env.VITE_TIMEOUT,
 	withCredentials: false
+});
+
+axios.interceptors.request.use((config) => {
+	if (storage.isExpired("token")) {
+		// refreshToken是否过期
+		if (storage.isExpired("refreshToken")) {
+		} else {
+			// 刷新token
+		}
+		config.headers.Authorization = storage.get("token");
+	}
+	return config;
+});
+
+axios.interceptors.response.use((resp) => {
+	return resp;
 });
 
 export class BaseService {
@@ -18,6 +35,8 @@ export class BaseService {
 				if (isDev) {
 					options.url = config.baseUrl + options.url;
 				}
+
+				options.headers.Accept = "application/json";
 			}
 		}
 

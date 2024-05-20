@@ -2,6 +2,16 @@
 	<transition name="fade" mode="out-in">
 		<v-main class="wrapper">
 			<v-form class="auth-form" @submit.prevent>
+				<div class="position-relative">
+					<v-fab
+						class="position-absolute"
+						style="left: 1rem; top: 2rem"
+						prepend-icon="$vuetify"
+						text="返回"
+						@click="backFunc()"
+						extended
+					></v-fab>
+				</div>
 				<v-row class="auth-header">
 					<v-col>
 						<h1 class="title text-primary-color">Authenticate Code</h1>
@@ -36,11 +46,12 @@
 </template>
 
 <script lang="ts" setup>
-import { Router, router } from "@/router";
+import { Router } from "@/router";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 const loading = ref(false);
-
+const router = useRouter();
 const submitCode = () => {
 	loading.value = true;
 
@@ -48,6 +59,10 @@ const submitCode = () => {
 		loading.value = false;
 		router.replace(Router.home);
 	}, 2000);
+};
+const backFunc = () => {
+	console.log(router.options.history.state);
+	router.replace((router.options.history.state?.back || Router.login) as string);
 };
 </script>
 

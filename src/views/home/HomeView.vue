@@ -7,7 +7,7 @@
 		</router-view>
 	</div>
 	<div>
-		<TabBarBottom></TabBarBottom>
+		<tab-bar-bottom></tab-bar-bottom>
 	</div>
 </template>
 
