@@ -102,7 +102,6 @@ const rules = {
 const passwordVisibility = ref(false);
 
 const submitLogin = (event: Event) => {
-	
 	if (!emailVal.value || !passwordVal.value) {
 		// emailVal == '' and passwordVal == ''
 		return;
