@@ -53,19 +53,12 @@
 				</div>
 			</v-form>
 			<div class="reset-password">
-				<router-link :to="Router.resetPassword">忘记密码</router-link>
+				<router-link to="/forget">忘记密码</router-link>
 			</div>
 		</div>
 
 		<div class="btn-box other">
-			<v-btn
-				block
-				rounded="lg"
-				height="45px"
-				color="#E9E8F9"
-				type="button"
-				@click="$router.push(Router.register)"
-			>
+			<v-btn block rounded="lg" height="45px" color="#E9E8F9" type="button" to="/register">
 				<template #prepend>
 					<v-icon icon="mdi-account-plus"></v-icon>
 				</template>
@@ -77,14 +70,13 @@
 
 <script lang="ts" setup>
 import { config } from "@/config";
-import { Router, router } from "@/router";
+import { useUserStore } from "@/stores/user";
 import { isEmail, storage } from "@/utils";
 import { BaseService } from "@/utils/request";
-import { ref } from "vue";
+import { onActivated, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+import { useToast } from "vue-toastification";
 
-const emailVal = ref("");
-const passwordVal = ref("");
-const loading = ref(false);
 const rules = {
 	email: (val: string) => {
 		return isEmail(val) || "请输入正确的邮箱";
@@ -99,7 +91,13 @@ const rules = {
 	}
 };
 
+const emailVal = ref("");
+const passwordVal = ref("");
+const loading = ref(false);
 const passwordVisibility = ref(false);
+const userStore = useUserStore();
+const router = useRouter();
+const toast = useToast();
 
 const submitLogin = (event: Event) => {
 	if (!emailVal.value || !passwordVal.value) {
@@ -119,14 +117,9 @@ const submitLogin = (event: Event) => {
 			console.log(resp.data);
 
 			if (resp.data.code === 1000 && resp.data.data) {
-				storage.set("token", resp.data.data.token, resp.data.data.expire);
-				storage.set(
-					"refreshToken",
-					resp.data.data.refreshToken,
-					resp.data.data.refreshExpire
-				);
-				console.log("登录成功", resp.data.data.token, resp.data.data.refreshToken);
-				// router.push(Router.home);
+				userStore.setToken(resp.data.data);
+				toast.success("登录成功！");
+				router.replace("/home");
 			}
 		})
 		.catch((err) => {

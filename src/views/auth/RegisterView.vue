@@ -86,14 +86,7 @@
 		</div>
 
 		<div class="btn-box other">
-			<v-btn
-				block
-				rounded="lg"
-				color="#E9E8F9"
-				height="45px"
-				type="button"
-				@click="$router.push(Router.login)"
-			>
+			<v-btn block rounded="lg" color="#E9E8F9" height="45px" type="button" to="/login">
 				<template #prepend>
 					<v-icon icon="mdi-login"></v-icon>
 				</template>
@@ -105,7 +98,7 @@
 
 <script lang="ts" setup>
 import { config } from "@/config";
-import { Router, router } from "@/router";
+import { router } from "@/router";
 import { isEmail } from "@/utils";
 import { BaseService } from "@/utils/request";
 import { onActivated, onMounted, reactive, ref } from "vue";
@@ -157,7 +150,7 @@ const submitRegister = (event: Event) => {
 	loading.value = true;
 	setTimeout(() => {
 		loading.value = false;
-		router.push(Router.authenticated);
+		router.push("/authenticated");
 	}, 2000);
 };
 

@@ -22,7 +22,7 @@
 	</div>
 </template>
 <script lang="ts">
-import { Router, router } from "@/router";
+import { router } from "@/router";
 import { ref } from "vue";
 
 export default {
@@ -34,12 +34,9 @@ export default {
 		}
 	},
 	setup() {
-		interface Routes {
-			[key: string]: string;
-		}
-		const routes: Routes = {
-			forum: Router.forum,
-			user: Router.myUser
+		const routes = {
+			forum: "/home/forum",
+			user: "/home/my-user"
 		};
 
 		const navVal = ref("forum");

@@ -1,8 +1,18 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
 import { useTheme } from "vuetify";
+import { useUserStore } from "./stores/user";
+import { storage } from "./utils";
 
 const theme = useTheme();
+const userStore = useUserStore();
+
+userStore.setToken({
+	token: storage.get("token") || "",
+	expire: storage.getExpiration("token") || 0,
+	refreshToken: storage.get("refreshToken") || "",
+	refreshExpire: storage.getExpiration("refreshToken") || 0
+});
 
 // @ts-ignore
 window.toggletheme = () => {

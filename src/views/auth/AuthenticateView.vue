@@ -46,7 +46,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Router } from "@/router";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -57,12 +56,12 @@ const submitCode = () => {
 
 	setTimeout(() => {
 		loading.value = false;
-		router.replace(Router.home);
+		router.replace("/home");
 	}, 2000);
 };
 const backFunc = () => {
 	console.log(router.options.history.state);
-	router.replace((router.options.history.state?.back || Router.login) as string);
+	router.replace((router.options.history.state?.back || "/login") as string);
 };
 </script>
 

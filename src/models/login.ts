@@ -6,10 +6,10 @@ export interface LoginRequestModel {
 export interface LoginResponseModel {
 	code: number;
 	message: string;
-	data?: Data;
+	data?: LoginDataResponseModel;
 }
 
-interface Data {
+export interface LoginDataResponseModel {
 	expire: number;
 	token: string;
 	refreshExpire: number;

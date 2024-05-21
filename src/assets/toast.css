@@ -1,0 +1,5 @@
+@media (max-width: 440px) {
+    .toast-mobile {
+        scale: 0.8;
+    }
+}

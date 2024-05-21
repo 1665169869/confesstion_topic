@@ -1,30 +1,78 @@
-import { config, isDev, proxy } from "@/config";
+import { config, isDev } from "@/config";
 import type { CaptchaRequestModel, CaptchaResponseModel } from "@/models/captcha";
 import axios, { type AxiosRequestConfig } from "axios";
 import { color16, storage } from ".";
 import type { LoginRequestModel, LoginResponseModel } from "@/models/login";
-import { router } from "@/router";
+import { useUserStore } from "@/stores/user";
+import { TYPE, useToast } from "vue-toastification";
+import type { DetailRequestModel, DetailResponseModel } from "@/models/detail";
+import type { RefreshTokenRequestModel, RefreshTokenResponseModel } from "@/models/refreshToken";
 
 export const axiosInstance = axios.create({
 	timeout: import.meta.env.VITE_TIMEOUT,
 	withCredentials: false
 });
 
-axios.interceptors.request.use((config) => {
-	if (storage.isExpired("token")) {
-		// refreshToken是否过期
-		if (storage.isExpired("refreshToken")) {
-		} else {
-			// 刷新token
-		}
-		config.headers.Authorization = storage.get("token");
-	}
-	return config;
-});
+axiosInstance.interceptors.request.use(
+	(config) => {
+		const userStore = useUserStore();
+		const toast = useToast();
 
-axios.interceptors.response.use((resp) => {
-	return resp;
-});
+		if (userStore.token) {
+			if (storage.isExpired("token")) {
+				// refreshToken是否过期
+				if (storage.isExpired("refreshToken")) {
+					toast.error("登录过期，请重新登录~", {
+						timeout: 2000,
+						type: TYPE.ERROR
+					});
+					userStore.logout();
+				} else {
+					// 刷新token
+					BaseService.refreshToken({ refreshToken: storage.get("refreshToken") })
+						.then((res) => {
+							const { data } = res.data;
+							userStore.setToken(data);
+						})
+						.catch((err) => {
+							toast.error("登录过期，请重新登录~", {
+								timeout: 2000,
+								type: TYPE.ERROR
+							});
+							userStore.logout();
+						});
+				}
+			}
+			config.headers.Authorization = storage.get("token");
+		}
+		return config;
+	},
+	(err) => {
+		return Promise.reject(err);
+	}
+);
+
+axiosInstance.interceptors.response.use(
+	(resp) => {
+		const { code, message } = resp.data;
+
+		if (code === 1000) {
+			return resp;
+		} else {
+			return Promise.reject({ code, message });
+		}
+	},
+	(err) => {
+		const toast = useToast();
+
+		toast.error(err.message, {
+			timeout: 2000,
+			type: TYPE.ERROR
+		});
+
+		return Promise.reject(err);
+	}
+);
 
 export class BaseService {
 	static async request<T = any>(options: AxiosRequestConfig) {
@@ -35,8 +83,6 @@ export class BaseService {
 				if (isDev) {
 					options.url = config.baseUrl + options.url;
 				}
-
-				options.headers.Accept = "application/json";
 			}
 		}
 
@@ -60,16 +106,33 @@ export class BaseService {
 		});
 	}
 
-	static login(parmas: LoginRequestModel) {
-		if (parmas === undefined) {
-			parmas = {} as LoginRequestModel;
-		}
-
+	static login(body: LoginRequestModel) {
 		return this.request<LoginResponseModel>({
 			method: "POST",
 			url: "/app/user/login/email",
 			data: {
+				...body
+			}
+		});
+	}
+
+	// 获取帖子详情
+	static detailInfo(parmas: DetailRequestModel) {
+		return this.request<DetailResponseModel>({
+			method: "GET",
+			url: "/app/confession/topic/info",
+			params: {
 				...parmas
+			}
+		});
+	}
+
+	static refreshToken(body: RefreshTokenRequestModel) {
+		return this.request<RefreshTokenResponseModel>({
+			method: "POST",
+			url: "/app/user/login/refreshToken",
+			data: {
+				...body
 			}
 		});
 	}

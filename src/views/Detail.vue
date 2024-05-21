@@ -6,10 +6,16 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from "vue";
+import { BaseService } from "@/utils/request";
+import { computed, onActivated } from "vue";
+import { useRoute } from "vue-router";
 
-onMounted(() => {
-	console.log("detail onMounted");
+const route = useRoute();
+const detailId = computed<number>(() => Number(route.params.id));
+
+onActivated(async () => {
+	const res = await BaseService.detailInfo({ id: detailId.value });
+	console.log(res.data);
 });
 </script>
 
