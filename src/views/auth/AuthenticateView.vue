@@ -28,7 +28,8 @@
 							base-color="primary"
 							@finish="submitCode"
 						></v-otp-input>
-						<p class="resend-code">未收到验证码？<a href="#">重新获取</a></p>
+						<!-- 先别做重发验证码逻辑，后端接口还没写好 -->
+						<!-- <p class="resend-code">未收到验证码？<a href="#">重新获取</a></p> -->
 						<v-btn
 							block
 							color="#4D7CF2"
@@ -46,11 +47,19 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { Base64 } from "js-base64";
+import { computed, onActivated, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
+const router = useRouter();
+const route = useRoute();
+
+const type = computed(() => route.query.type);
+const email = computed(() => route.query.email);
+const password = computed(() => Base64.decode(route.query.password as string));
 
 const loading = ref(false);
-const router = useRouter();
+
 const submitCode = () => {
 	loading.value = true;
 

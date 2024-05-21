@@ -102,6 +102,7 @@ import { router } from "@/router";
 import { isEmail } from "@/utils";
 import { BaseService } from "@/utils/request";
 import { onActivated, onMounted, reactive, ref } from "vue";
+import { Base64 } from "js-base64";
 
 const emailVal = ref("");
 const passwordVal = ref("");
@@ -150,7 +151,20 @@ const submitRegister = (event: Event) => {
 	loading.value = true;
 	setTimeout(() => {
 		loading.value = false;
-		router.push("/authenticated");
+
+		// 这里需要发送请求到后端，验证图片验证码是否正确，如果正确后端会向邮箱发送验证代码
+		// TODO 验证图片验证码并发送验证邮件
+
+		// 跳转到authenticated
+		router.push({
+			name: "authenticated",
+			query: {
+				type: "register",
+				email: emailVal.value,
+				// 密码先进行base64编码
+				password: Base64.encode(passwordVal.value)
+			}
+		});
 	}, 2000);
 };
 
